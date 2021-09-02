@@ -4,29 +4,24 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-typedef struct Libro{
-    char titulo[50];
-} Libro;
+typedef struct conexion{
+    int id_conexion;
+    struct conexion *sigConexion;
+    
+}subnodo;
 
-typedef struct Nodo{
-    Libro libro;
-    struct Nodo* sig;
-} Nodo;
+typedef struct vertice{
+    int id_vertice;
+    struct subnodo *subLista;
+    struct vertice  *sigVertice;
+}vertice;
 
-typedef struct Lista{
-    Nodo* cabeza;
-    int longitud;
-}Lista;
+int cant_vertices = 0;
 
-Nodo* crear_nodo(Libro* libro);
-void destruir_nodo(Nodo* nodo);
-void insertar_principio(Lista* lista, Libro* libro);
-void insertar_final(Lista* lista, Libro* libro);
-void insertar_despues(int n, Lista* lista, Libro* libro);
-Libro* obtener(int n, Lista* lista);
-int contar(Lista* lista);
-void eliminar_principio(Lista* lista);
-void eliminar_ultimo(Lista* lista);
-void eliminar_elemento(int n, Lista* lista);
+void agregar_vertice(vertice* registro);
+void ingresar_sublista(subnodo* registro);
+void imprimir_vertices(vertice* registro);
+void imprimir_subListas(subnodo* registro);
+vertice* buscar_vertice(vertice* registro, int n);
 
 #endif
