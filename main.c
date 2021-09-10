@@ -4,8 +4,18 @@
 
 int main(){
 
-    printf("Hello world!\n");
+    Lista* lista = (Lista*)malloc(sizeof(lista));
+    lista->cant_vertices = 0;
+
+
+    agregar_vertice(lista);
+    agregar_vertice(lista);
+    agregar_vertice(lista);
+    
+    agregar_conexion(lista);
+    
+    printf("---------- Imprimimos vertices y aristas ----------\n");
+    imprimir_vertices(lista->cabeza);
 
     return 0;
 }
-

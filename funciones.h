@@ -4,24 +4,29 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-typedef struct conexion{
+typedef struct Conexion{
     int id_conexion;
-    struct conexion *sigConexion;
+    struct Conexion *sigConexion;
     
-}subnodo;
+}Subnodo;
 
-typedef struct vertice{
+typedef struct Vertice{
     int id_vertice;
-    struct subnodo *subLista;
-    struct vertice  *sigVertice;
-}vertice;
+    struct Subnodo *subLista;
+    struct Vertice  *sigVertice;
+}Vertice;
 
-int cant_vertices = 0;
+typedef struct Lista{
+    Vertice* cabeza;
+    int cant_vertices;
+}Lista;
 
-void agregar_vertice(vertice* registro);
-void ingresar_sublista(subnodo* registro);
-void imprimir_vertices(vertice* registro);
-void imprimir_subListas(subnodo* registro);
-vertice* buscar_vertice(vertice* registro, int n);
+void imprimir_vertices(Vertice* vertice);
+void imprimir_sublistas(Subnodo* nodo);
+Vertice* crear_vertice(Lista* lista);
+void agregar_conexion(Lista* lista);
+Vertice* obtener_vertice(Lista* lista, int n);
+void establecer_conexion(Vertice* vertice, int nodo);
+void agregar_vertice(Lista* lista);
 
 #endif

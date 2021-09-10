@@ -1,75 +1,135 @@
 #include "funciones.h"
 
-void agregar_vertice(vertice* registro){
 
-    int nuevo_vertice = 0;
-    printf("Si quiere agregar un nuevo vertice ingrese: [1] de lo contrario: [0]\n");
-    scanf("%d\n", nuevo_vertice);
+void imprimir_vertices(Vertice* vertice){
 
-    if(nuevo_vertice == 1){
-        cant_vertices++; //Aumenta el contador para agregar el id automaticamente
-        registro->id_vertice = cant_vertices;
+    if(vertice!= NULL){
+        
+        printf("Vertice: [%d]\n", vertice->id_vertice);
 
-        registro->subLista = (subnodo*)malloc(sizeof(subnodo));
-        ingresar_sublista(registro->subLista);
+        imprimir_sublistas(vertice->subLista);
 
-        registro->sigVertice = (vertice*)malloc(sizeof(vertice));
-        agregar_vertice(registro->sigVertice);
-    } else registro->sigVertice = NULL;
-
-}
-
-void ingresar_sublista(subnodo* registro){
-
-    int nueva_conexion = 0;
-    printf("Si quiere agregar una nueva conexion al vertice creado ingrese: [1] de lo contrario: [0]\n");
-    scanf("%d\n", nueva_conexion);
-    
-    if(nueva_conexion == 1){
-
-        int vertice_conectar;
-        printf("Ingrese el vertice con el que se tiene una conexion: ");
-        scanf("%d", &vertice_conectar);
-
-        registro->id_conexion = vertice_conectar;
-        registro->sigConexion = (subnodo*)malloc(sizeof(subnodo));
-        ingresar_sublista(registro->sigConexion);
-
-    } else registro->sigConexion = NULL;
-    
-}
-
-void imprimir_vertices(vertice* registro){
-    if(registro->sigVertice != NULL){
-        printf("--------------------------------------------------------------\n");
-        printf("Vertice: [%d]\t", registro->id_vertice);
-        imprimir_subListas(registro->subLista); // Mostramos las conexiones del vertice
-
-
-        imprimir_vertices(registro->sigVertice); // Mostramos el siguiente vertice
-    }
-}
-
-void imprimir_subListas(subnodo* registro){
-    if(registro->sigConexion != NULL){
-      
-        printf("\t ->[%d]", registro->id_conexion);
-        imprimir_subListas(registro->sigConexion);
+        imprimir_vertices(vertice->sigVertice); 
     
     }
+
 }
 
-vertice* buscar_vertice(vertice* registro, int n){
+/*
+void imprimir_sublistas(Subnodo* nodo){
 
-    if(registro->sigVertice == NULL){
+    if(nodo != NULL){
+        printf("\t->[%d]\n", nodo->id_conexion);
+        imprimir_sublistas(nodo->sigConexion);
+    }
+
+}
+*/
+
+Vertice* crear_vertice(Lista* lista){
+
+    Vertice* vertice = (Vertice*)malloc(sizeof(Vertice));
+    vertice->id_vertice = lista->cant_vertices;
+    vertice->sigVertice = NULL;
+    vertice->subLista = NULL;
+
+    lista->cant_vertices++;
+
+    return vertice;
+
+}
+
+
+
+void agregar_conexion(Lista* lista){
+
+    printf("\n\n---------- Agregaremos una nueva conexion ----------");
+
+    int primer_vertice, segundo_vertice;
+    printf("\nIngrese el primer vertice: ");
+    scanf("%d", &primer_vertice);
+    Vertice* vertice1 = obtener_vertice(lista, primer_vertice);
+
+
+    printf("Ingrese el segundo vertice: ");
+    scanf("%d", &segundo_vertice);
+    Vertice* vertice2 = obtener_vertice(lista, segundo_vertice);
+
+        
+    establecer_conexion(vertice1, segundo_vertice);
+    establecer_conexion(vertice2, primer_vertice);
+
+    printf("\nSe agregado una conexion correctamente!\n");
+
+}
+
+
+
+Vertice* obtener_vertice(Lista* lista, int n){
+
+    Vertice* puntero = lista->cabeza;
+
+    if(puntero == NULL){
     
-        printf("No existe dicho vertice\n");
+        printf("\nError: No existe ningun vertice");
         return NULL;
 
     } else {
 
-        if(registro->id_vertice == n) return registro;
-        else return buscar_vertice(registro->sigVertice, n);
+        while (puntero->id_vertice != 1 && puntero != NULL){
+            puntero = puntero->sigVertice;
+        }
+
+        return puntero;
+
+    }
+    
+
+}
+
+
+void establecer_conexion(Vertice* vertice, int nodo){
+
+    Subnodo* conectar = vertice->subLista;
+
+    if(conectar == NULL){
+
+        conectar = (Subnodo*)malloc(sizeof(Subnodo));
+        conectar->id_conexion = nodo;
+
+    } else {
+
+        while (conectar != NULL){
+            conectar = conectar->sigConexion;
+        }
+        
+        conectar = (Subnodo*)malloc(sizeof(Subnodo));
+        conectar->id_conexion = nodo;
+        conectar->sigConexion = NULL;
+    }
+
+}
+
+
+void agregar_vertice(Lista* lista){
+    
+    Vertice* nuevo_vertice = crear_vertice(lista);
+    Vertice* puntero = lista->cabeza;
+
+    if(lista->cabeza == NULL){
+        
+        lista->cabeza = nuevo_vertice;
+        printf("CREO PRIMER NODO [%d]", lista->cabeza->id_vertice);
+
+    } else {
+
+        while(puntero->sigVertice != NULL){
+            puntero = puntero->sigVertice;
+        }
+
+        puntero->sigVertice = nuevo_vertice;
+
+        printf("\nAGREGO NUEVO NODO [%d]", nuevo_vertice->id_vertice);
 
     }
 }
