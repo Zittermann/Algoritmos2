@@ -13,7 +13,8 @@ int main(){
     agregar_vertice(lista);
     
     agregar_conexion(lista);
-    
+    agregar_conexion(lista);
+
     printf("---------- Imprimimos vertices y aristas ----------\n");
     imprimir_vertices(lista->cabeza);
 
