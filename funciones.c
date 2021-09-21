@@ -246,7 +246,6 @@ void desconectar_vertices(Vertice* vertice, int id_nodo){
 
                     anterior->sigConexion = NULL;
                     
-
                 } else {
                     
                     anterior->sigConexion = puntero->sigConexion; // La conexion que buscamos no es la primera ni la ultima
