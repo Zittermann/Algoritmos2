@@ -10,12 +10,18 @@ int main(){
     agregar_vertice(lista);
     agregar_vertice(lista);
     agregar_vertice(lista);
+    agregar_vertice(lista);
 
     printf("\n---------- Imprimimos vertices y aristas ----------\n");
-    imprimir_vertices(lista->cabeza);
 
-    printf("---------- Eliminamos vertice ----------\n");
-    eliminar_vertice(lista);
+    agregar_conexion(lista);
+    agregar_conexion(lista);
+    agregar_conexion(lista);
+
+    printf("---------- Eliminamos conexiones ----------\n");
+    imprimir_vertices(lista->cabeza);
+    
+    eliminar_conexion(lista);
 
     imprimir_vertices(lista->cabeza);
 

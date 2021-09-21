@@ -31,4 +31,6 @@ void establecer_conexion(Vertice* vertice, int nodo);
 void agregar_vertice(Lista* lista);
 void eliminar_primer_vertice(Lista* lista);
 void eliminar_vertice(Lista* lista);
+void eliminar_conexion(Lista* lista);
+void desconectar_vertices(Vertice* vertice, int id_nodo);
 #endif

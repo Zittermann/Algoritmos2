@@ -93,6 +93,11 @@ Vertice* obtener_vertice(Lista* lista, int n){
             puntero = puntero->sigVertice;
         }
 
+        if(puntero == NULL){
+            printf("Error: No existe tal vertice");
+            puntero = NULL;
+        }
+
         return puntero;
         
     }
@@ -186,6 +191,74 @@ void eliminar_vertice(Lista* lista){
         free(eliminado);
         lista->cant_vertices--;
     
-    } else printf("\nError: No se pudo eliminar el vertice");
+    } else printf("\nError: Ese vertice no existe\n");
     
+}
+
+void eliminar_conexion(Lista* lista){
+
+    int id_primero, id_segundo;
+    printf("\nIngrese el primer vertice: ");
+    scanf("%d", &id_primero);
+    Vertice* vertice1 = obtener_vertice(lista, id_primero);
+
+
+    printf("Ingrese el segundo vertice: ");
+    scanf("%d", &id_segundo);
+    Vertice* vertice2 = obtener_vertice(lista, id_segundo);
+
+    esconectar_vertices(vertice2, id_primero);
+    desconectar_vertices(vertice1, id_segundo);
+
+    printf("Se ha eliminado la conexion entre el vertice [%d] y el [%d]\n", id_primero, id_segundo);
+
+}
+
+
+void desconectar_vertices(Vertice* vertice, int id_nodo){
+
+    Subnodo* puntero = vertice->subLista;
+    Subnodo* anterior = puntero;
+    
+
+    if(vertice->subLista == NULL){
+
+        printf("\nError: El vertice [%d] no tiene ninguna conexion\n\n", vertice->id_vertice);
+
+    } else {
+
+        /* Salgo si y solo si encontre la conexion o ya no hay mas conexiones */
+        while (puntero->id_conexion != id_nodo && puntero->sigConexion != NULL){
+            anterior = puntero;
+            puntero = puntero->sigConexion;
+        }
+
+        /* Si la conexion donde paro el loop no es la que buscaba entonces la conexion no existe */
+        if(puntero->id_conexion != id_nodo){
+            printf("\nError: El vertice [%d] no tiene conexion con el [%d]\n\n", vertice->id_vertice, id_nodo);
+        } else {
+
+            if(puntero == vertice->subLista){ // La cabeza de la sublista es la conexion que estamos buscando
+                vertice->subLista = puntero->sigConexion;
+            } else {
+
+                if(puntero->sigConexion == NULL){ // La conexion que buscamos es la ultima
+
+                    anterior->sigConexion = NULL;
+                    
+
+                } else {
+                    
+                    anterior->sigConexion = puntero->sigConexion; // La conexion que buscamos no es la primera ni la ultima
+
+                }
+
+                free(puntero);
+
+            }
+            
+        }
+
+    }
+
 }
