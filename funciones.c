@@ -128,6 +128,8 @@ void establecer_conexion(Vertice* vertice, int id_nodo){
 
 
 void agregar_vertice(Lista* lista){
+
+    printf("---------- Agregamos un nuevo vertice ----------\n");
     
     Vertice* nuevo_vertice = crear_vertice(lista);
     Vertice* puntero = lista->cabeza;
@@ -135,7 +137,6 @@ void agregar_vertice(Lista* lista){
     if(lista->cabeza == NULL){
        
         lista->cabeza = nuevo_vertice;
-        printf("CREO PRIMER NODO [%d]", lista->cabeza->id_vertice);
 
     } else {
 
@@ -145,9 +146,10 @@ void agregar_vertice(Lista* lista){
 
         puntero->sigVertice = nuevo_vertice;
 
-        printf("\nAGREGO NUEVO NODO [%d]", nuevo_vertice->id_vertice);
-
     }
+
+    printf("\nAGREGO NUEVO NODO [%d]", nuevo_vertice->id_vertice);
+
 }
 
 
@@ -169,6 +171,8 @@ void eliminar_primer_vertice(Lista* lista){
 
 void eliminar_vertice(Lista* lista){
 
+    printf("---------- Eliminamos vertices ----------\n");
+
     int posicion = 0;
     printf("Ingrese la posicion del vertice a eliminar: ");
     scanf("%d", &posicion);
@@ -188,6 +192,8 @@ void eliminar_vertice(Lista* lista){
         Vertice* eliminado = puntero->sigVertice;
         puntero->sigVertice = eliminado->sigVertice;
 
+        printf("\nSe ha eliminado el vertice en la posicion [%d]!\n", eliminado->id_vertice);
+
         free(eliminado);
         lista->cant_vertices--;
     
@@ -196,6 +202,8 @@ void eliminar_vertice(Lista* lista){
 }
 
 void eliminar_conexion(Lista* lista){
+
+    printf("---------- Eliminamos conexiones ----------\n");
 
     int id_primero, id_segundo;
     printf("\nIngrese el primer vertice: ");
@@ -207,7 +215,7 @@ void eliminar_conexion(Lista* lista){
     scanf("%d", &id_segundo);
     Vertice* vertice2 = obtener_vertice(lista, id_segundo);
 
-    esconectar_vertices(vertice2, id_primero);
+    desconectar_vertices(vertice2, id_primero);
     desconectar_vertices(vertice1, id_segundo);
 
     printf("Se ha eliminado la conexion entre el vertice [%d] y el [%d]\n", id_primero, id_segundo);
@@ -242,7 +250,7 @@ void desconectar_vertices(Vertice* vertice, int id_nodo){
                 vertice->subLista = puntero->sigConexion;
             } else {
 
-                if(puntero->sigConexion == NULL){ // La conexion que buscamos es la ultima
+                if(puntero->sigConexion == NULL){ // La ultima conexion es la que estamos buscando
 
                     anterior->sigConexion = NULL;
                     
@@ -259,5 +267,59 @@ void desconectar_vertices(Vertice* vertice, int id_nodo){
         }
 
     }
+
+}
+
+void ejecutar_menu(Lista* lista){
+
+    int opcion = -1;
+
+    while (opcion != 0){
+
+        imprimir_menu();
+        
+        printf("Ingrese la opcion elegida: ");
+        scanf("%d", &opcion);
+
+        if(opcion == 1){
+
+            agregar_vertice(lista);
+
+        } else if(opcion == 2){
+
+            agregar_conexion(lista);
+
+        } else if(opcion == 3){
+
+            eliminar_vertice(lista);
+        
+        } else if(opcion == 4){
+
+            eliminar_conexion(lista);
+
+        } else if(opcion == 5){
+
+            printf("\n---------- Imprimimos vertices y aristas ----------\n");
+
+            imprimir_vertices(lista->cabeza);
+
+        }
+
+    }
+
+}
+
+void imprimir_menu(){
+
+    printf("\n\n---------- Escoja una opcion del menu ----------\n\n");
+
+    printf("1. Agregar vertice\n");
+    printf("2. Agregar conexion\n");
+    printf("3. Eliminar vertice\n");
+    printf("4. Eliminar conexion\n");
+    printf("5. Mostrar grafo\n");
+    printf("0. Salir...\n");
+
+    printf("\n");
 
 }
