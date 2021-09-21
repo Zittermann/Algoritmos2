@@ -19,6 +19,7 @@ typedef struct Vertice{
 typedef struct Lista{
     Vertice* cabeza;
     int cant_vertices;
+    int cont_id_vertices;
 }Lista;
 
 void imprimir_vertices(Vertice* vertice);
@@ -28,5 +29,6 @@ void agregar_conexion(Lista* lista);
 Vertice* obtener_vertice(Lista* lista, int n);
 void establecer_conexion(Vertice* vertice, int nodo);
 void agregar_vertice(Lista* lista);
-
+void eliminar_primer_vertice(Lista* lista);
+void eliminar_vertice(Lista* lista);
 #endif

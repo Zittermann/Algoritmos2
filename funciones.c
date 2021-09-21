@@ -18,15 +18,6 @@ void imprimir_vertices(Vertice* vertice){
 
 void imprimir_sublistas(Subnodo* nodo){
 
-/*
-    if(nodo != NULL){
-
-        printf("Entramos al if\n");
-
-        printf("\t->[%d]\n", nodo->id_conexion);
-        imprimir_sublistas(nodo->sigConexion);
-    }
-*/
     Subnodo* puntero = nodo;
 
     while (puntero != NULL){
@@ -41,15 +32,17 @@ void imprimir_sublistas(Subnodo* nodo){
 Vertice* crear_vertice(Lista* lista){
 
     Vertice* vertice = (Vertice*)malloc(sizeof(Vertice));
-    vertice->id_vertice = lista->cant_vertices;
+    vertice->id_vertice = lista->cont_id_vertices;
     vertice->sigVertice = NULL;
     vertice->subLista = NULL;
 
     lista->cant_vertices++;
+    lista->cont_id_vertices++;
 
     return vertice;
 
 }
+
 
 Subnodo* crear_subnodo(int n){
 
@@ -60,7 +53,6 @@ Subnodo* crear_subnodo(int n){
     return conectar;
 
 }
-
 
 
 void agregar_conexion(Lista* lista){
@@ -84,6 +76,7 @@ void agregar_conexion(Lista* lista){
     printf("\nSe agregado una conexion correctamente!\n");
 
 }
+
 
 Vertice* obtener_vertice(Lista* lista, int n){
 
@@ -150,4 +143,49 @@ void agregar_vertice(Lista* lista){
         printf("\nAGREGO NUEVO NODO [%d]", nuevo_vertice->id_vertice);
 
     }
+}
+
+
+void eliminar_primer_vertice(Lista* lista){
+
+    if(lista->cabeza != NULL){
+
+        Vertice* eliminado = lista->cabeza;
+        lista->cabeza = lista->cabeza->sigVertice;
+
+        printf("\nSe ha eliminado el vertice en la posicion [%d]!\n", eliminado->id_vertice);
+
+        free(eliminado);
+        lista->cant_vertices--;
+
+    } else printf("Error: No existe ningun vertice");
+
+}
+
+void eliminar_vertice(Lista* lista){
+
+    int posicion = 0;
+    printf("Ingrese la posicion del vertice a eliminar: ");
+    scanf("%d", &posicion);
+
+    if(posicion == 0){
+
+        eliminar_primer_vertice(lista);
+
+    } else if (posicion > 0 && posicion < lista->cant_vertices) {
+        
+        Vertice* puntero = lista->cabeza;
+
+        while(puntero->id_vertice != posicion-1){
+            puntero = puntero->sigVertice;    
+        }
+
+        Vertice* eliminado = puntero->sigVertice;
+        puntero->sigVertice = eliminado->sigVertice;
+
+        free(eliminado);
+        lista->cant_vertices--;
+    
+    } else printf("\nError: No se pudo eliminar el vertice");
+    
 }
