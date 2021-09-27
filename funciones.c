@@ -235,28 +235,38 @@ void desconectar_vertices(Vertice* vertice, int id_nodo){
 
     } else {
 
-        /* Salgo si y solo si encontre la conexion o ya no hay mas conexiones */
+        
+        // Salgo si, y solo si, encontre la conexion ó ya no hay mas conexiones 
         while (puntero->id_conexion != id_nodo && puntero->sigConexion != NULL){
             anterior = puntero;
             puntero = puntero->sigConexion;
         }
 
-        /* Si la conexion donde paro el loop no es la que buscaba entonces la conexion no existe */
-        if(puntero->id_conexion != id_nodo){
-            printf("\nError: El vertice [%d] no tiene conexion con el [%d]\n\n", vertice->id_vertice, id_nodo);
-        } else {
 
-            if(puntero == vertice->subLista){ // La cabeza de la sublista es la conexion que estamos buscando
+         // Si la conexion donde paro el loop no es la que buscaba entonces la conexion no existe 
+        if(puntero->id_conexion != id_nodo){
+
+            printf("\nError: El vertice [%d] no tiene conexion con el [%d]\n\n", vertice->id_vertice, id_nodo);
+
+        // Las siguientes condiciones solo se cumpliran si la conexion que buscamos existe
+        } else {
+            /*
+             * La cabeza de la sublista es la conexion que estamos buscando
+             */
+            if(puntero == vertice->subLista){
                 vertice->subLista = puntero->sigConexion;
             } else {
-
-                if(puntero->sigConexion == NULL){ // La ultima conexion es la que estamos buscando
-
+                /*
+                 * La ultima sublista es conexion la que estamos buscando
+                 */
+                if(puntero->sigConexion == NULL){
                     anterior->sigConexion = NULL;
-                    
+                /*
+                 * La sublista que buscamos no es la primera ni la ultima conexion
+                 */
                 } else {
                     
-                    anterior->sigConexion = puntero->sigConexion; // La conexion que buscamos no es la primera ni la ultima
+                    anterior->sigConexion = puntero->sigConexion;
 
                 }
 
