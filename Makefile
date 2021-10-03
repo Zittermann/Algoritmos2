@@ -1,18 +1,23 @@
-# Primero se declararlian las dependencias
-# program: numeros.o funciones.o
-#	gcc -o numeros.o funciones
+OBJS = main.o vertices.o aristas.o imprimir.o
+BINARY = main
 
-all: main
+all: program
 
-main : main.c funciones.h funciones.c funciones.o
-	gcc -o main main.c funciones.o 
+program: $(OBJS)
+	gcc -o $(BINARY) $(OBJS) 
 
-funciones.o : funciones.h funciones.c
-	gcc -c funciones.c
+main.o: main.c funciones.h
+	gcc -c main.c
 
-output: main.c
-	gcc main.c -o main
+vertices.o: funciones_vertices.c funciones.h
+	gcc -c funciones_vertices.c
+
+aristas.o: funciones_aristas.c funciones.h
+	gcc -c funciones_aristas.c
+
+imprimir.o: funciones_imprimir.c funciones.h
+	gcc -c funciones_imprimir.c
  
 clean:
-	rm -rf *o main *~
+	rm -f $(BINARY) $(OBJS)
 
