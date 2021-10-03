@@ -1,7 +1,7 @@
-OBJS = main.o vertices.o aristas.o imprimir.o
+OBJS = main.o funciones_vertices.o funciones_aristas.o funciones_imprimir.o
 BINARY = main
 
-all: program
+# all: program
 
 program: $(OBJS)
 	gcc -o $(BINARY) $(OBJS) 
