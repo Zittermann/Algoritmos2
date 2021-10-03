@@ -7,6 +7,7 @@ Vertice* crear_vertice(Lista* lista){
     vertice->id_vertice = lista->cont_id_vertices;
     vertice->sigVertice = NULL;
     vertice->subLista = NULL;
+    vertice->grado_vertice = 0;
 
     lista->cant_vertices++;
     lista->cont_id_vertices++;
@@ -116,61 +117,31 @@ void eliminar_vertice(Lista* lista){
     
 }
 
+void es_eureliano(Lista* lista){
 
+    printf("\nENTRAMOS EN LA FUNCION\n");
 
-void desconectar_vertices(Vertice* vertice, int id_nodo){
+    int vertices_grado_impar = 0;
+    Vertice* puntero = lista->cabeza;
 
-    Subnodo* puntero = vertice->subLista;
-    Subnodo* anterior = puntero;
-    
-
-    if(vertice->subLista == NULL){
-
-        printf("\nError: El vertice [%d] no tiene ninguna conexion\n\n", vertice->id_vertice);
-
-    } else {
-
+    while (puntero != NULL){
         
-        // Salgo si, y solo si, encontre la conexion ó ya no hay mas conexiones 
-        while (puntero->id_conexion != id_nodo && puntero->sigConexion != NULL){
-            anterior = puntero;
-            puntero = puntero->sigConexion;
+        if(puntero->grado_vertice % 2 != 0){
+            vertices_grado_impar++;            
         }
 
-
-         // Si la conexion donde paro el loop no es la que buscaba entonces la conexion no existe 
-        if(puntero->id_conexion != id_nodo){
-
-            printf("\nError: El vertice [%d] no tiene conexion con el [%d]\n\n", vertice->id_vertice, id_nodo);
-
-        // Las siguientes condiciones solo se cumpliran si la conexion que buscamos existe
-        } else {
-            /*
-             * La cabeza de la sublista es la conexion que estamos buscando
-             */
-            if(puntero == vertice->subLista){
-                vertice->subLista = puntero->sigConexion;
-            } else {
-                /*
-                 * La ultima sublista es conexion la que estamos buscando
-                 */
-                if(puntero->sigConexion == NULL){
-                    anterior->sigConexion = NULL;
-                /*
-                 * La sublista que buscamos no es la primera ni la ultima conexion
-                 */
-                } else {
-                    
-                    anterior->sigConexion = puntero->sigConexion;
-
-                }
-
-                free(puntero);
-
-            }
-            
-        }
+        puntero = puntero->sigVertice;
 
     }
 
+    if(lista->cabeza == NULL){
+        printf("El grafo no tiene vertices...");
+    } else if(vertices_grado_impar == 2){
+        printf("El grafo tiene un ciclo eureliano.");
+    } else if(vertices_grado_impar == 0){
+        printf("El grafo tiene un camino eureliano.");
+    } else {
+        printf("El grafo no es eureliano.");
+    }
+    
 }

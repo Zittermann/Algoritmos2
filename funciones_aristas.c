@@ -54,6 +54,8 @@ void establecer_conexion(Vertice* vertice, int id_nodo){
 
     }
 
+    vertice->grado_vertice++;
+
 }
 
 
@@ -75,5 +77,61 @@ void eliminar_conexion(Lista* lista){
     desconectar_vertices(vertice1, id_segundo);
 
     printf("Se ha eliminado la conexion entre el vertice [%d] y el [%d]\n", id_primero, id_segundo);
+
+}
+
+
+void desconectar_vertices(Vertice* vertice, int id_nodo){
+
+    Subnodo* puntero = vertice->subLista;
+    Subnodo* anterior = puntero;
+    
+
+    if(vertice->subLista == NULL){
+
+        printf("\nError: El vertice [%d] no tiene ninguna conexion\n\n", vertice->id_vertice);
+
+    } else {
+        
+        // Salgo si, y solo si, encontre la conexion ó ya no hay mas conexiones 
+        while (puntero->id_conexion != id_nodo && puntero->sigConexion != NULL){
+            anterior = puntero;
+            puntero = puntero->sigConexion;
+        }
+
+         // Si la conexion donde paro el loop no es la que buscaba entonces la conexion no existe 
+        if(puntero->id_conexion != id_nodo){
+
+            printf("\nError: El vertice [%d] no tiene conexion con el [%d]\n\n", vertice->id_vertice, id_nodo);
+
+        // Las siguientes condiciones solo se cumpliran si la conexion que buscamos existe
+        } else {
+            /*
+             * La cabeza de la sublista es la conexion que estamos buscando
+             */
+            if(puntero == vertice->subLista){
+                vertice->subLista = puntero->sigConexion;
+            } else {
+                /*
+                 * La ultima sublista es conexion la que estamos buscando
+                 */
+                if(puntero->sigConexion == NULL){
+                    anterior->sigConexion = NULL;
+                /*
+                 * La sublista que buscamos no es la primera ni la ultima conexion
+                 */
+                } else {
+                    
+                    anterior->sigConexion = puntero->sigConexion;
+
+                }
+
+                free(puntero);
+
+            }
+            
+        }
+
+    }
 
 }

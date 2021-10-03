@@ -1,30 +1,19 @@
 #include "funciones.h"
 
 
-void imprimir_vertices(Vertice* vertice){
+void imprimir_menu(){
 
-    if(vertice!= NULL){
-        
-        printf("Vertice: [%d]\n", vertice->id_vertice);
+    printf("\n\n---------- Escoja una opcion del menu ----------\n\n");
 
-        imprimir_sublistas(vertice->subLista);
+    printf("1. Agregar vertice\n");
+    printf("2. Agregar conexion\n");
+    printf("3. Eliminar vertice\n");
+    printf("4. Eliminar conexion\n");
+    printf("5. Mostrar grafo\n");
+    printf("6. Preguntar si el grafo es eureliano\n");
+    printf("0. Salir...\n");
 
-        imprimir_vertices(vertice->sigVertice); 
-    
-    }
-
-}
-
-
-void imprimir_sublistas(Subnodo* nodo){
-
-    Subnodo* puntero = nodo;
-
-    while (puntero != NULL){
-
-        printf("\t->[%d]\n", puntero->id_conexion);
-        puntero = puntero->sigConexion;
-    }
+    printf("\n");
 
 }
 
@@ -62,23 +51,42 @@ void ejecutar_menu(Lista* lista){
 
             imprimir_vertices(lista->cabeza);
 
+        } else if(opcion == 6){
+            printf("\nENTRAMOS EN LA OPCION 6\n");
+            es_eureliano(lista);
+
         }
 
     }
 
 }
 
-void imprimir_menu(){
 
-    printf("\n\n---------- Escoja una opcion del menu ----------\n\n");
+void imprimir_vertices(Vertice* vertice){
 
-    printf("1. Agregar vertice\n");
-    printf("2. Agregar conexion\n");
-    printf("3. Eliminar vertice\n");
-    printf("4. Eliminar conexion\n");
-    printf("5. Mostrar grafo\n");
-    printf("0. Salir...\n");
+    if(vertice!= NULL){
+        
+        printf("Vertice: [%d] ", vertice->id_vertice);
+        printf("Grado: %d\n", vertice->grado_vertice);
 
-    printf("\n");
+        imprimir_sublistas(vertice->subLista);
+        imprimir_vertices(vertice->sigVertice); 
+    
+    }
+
+}
+
+
+void imprimir_sublistas(Subnodo* nodo){
+
+    Subnodo* puntero = nodo;
+
+    while (puntero != NULL){
+
+        printf(" ->[%d]", puntero->id_conexion);
+        puntero = puntero->sigConexion;
+    }
+
+    printf("\n\n");
 
 }

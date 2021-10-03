@@ -14,6 +14,7 @@ typedef struct Vertice{
     int id_vertice;
     struct Subnodo *subLista;
     struct Vertice  *sigVertice;
+    int grado_vertice;
 }Vertice;
 
 typedef struct Lista{
@@ -35,4 +36,5 @@ void eliminar_conexion(Lista* lista);
 void desconectar_vertices(Vertice* vertice, int id_nodo);
 void imprimir_menu();
 void ejecutar_menu(Lista* lista);
+void es_eureliano(Lista* lista);
 #endif
