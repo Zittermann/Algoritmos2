@@ -11,6 +11,7 @@ void imprimir_menu(){
     printf("4. Eliminar conexion\n");
     printf("5. Mostrar grafo\n");
     printf("6. Preguntar si el grafo es eureliano\n");
+    printf("7. Preguntar si tiene un ciclos.\n");
     printf("0. Salir...\n");
 
     printf("\n");
@@ -30,30 +31,27 @@ void ejecutar_menu(Lista* lista){
         scanf("%d", &opcion);
 
         if(opcion == 1){
-
             agregar_vertice(lista);
 
         } else if(opcion == 2){
-
             agregar_conexion(lista);
 
         } else if(opcion == 3){
-
             eliminar_vertice(lista);
         
         } else if(opcion == 4){
-
             eliminar_conexion(lista);
 
         } else if(opcion == 5){
 
             printf("\n---------- Imprimimos vertices y aristas ----------\n");
-
             imprimir_vertices(lista->cabeza);
 
         } else if(opcion == 6){
-            printf("\nENTRAMOS EN LA OPCION 6\n");
             es_eureliano(lista);
+
+        } else if(opcion == 7){
+            tiene_ciclos(lista);
 
         }
 

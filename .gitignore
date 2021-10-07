@@ -1,3 +1,4 @@
 main
+matiro.c
 *.o
 *.out

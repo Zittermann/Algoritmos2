@@ -117,9 +117,8 @@ void eliminar_vertice(Lista* lista){
     
 }
 
-void es_eureliano(Lista* lista){
 
-    printf("\nENTRAMOS EN LA FUNCION\n");
+void es_eureliano(Lista* lista){
 
     int vertices_grado_impar = 0;
     Vertice* puntero = lista->cabeza;
@@ -145,3 +144,287 @@ void es_eureliano(Lista* lista){
     }
     
 }
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////
+/*
+void inicializar_vector_adyacencias(int vec[], int len,int inicio){
+
+    for(int i = 0; i < len; i++){
+        if(inicio==i+1){
+        vec[i] = 1;
+        }
+        else{
+            vec[i] = 0;
+        }
+    }
+
+}
+
+
+int verificarVisitados(int id, int vertices_visitados[],int cant_vertices){
+    for(int i=0;i<cant_vertices;i++){
+        if(id==i && 1==vertices_visitados[i]){
+            return 0;
+        }
+    }
+    return 1;
+}
+
+
+void cargarAdyacencias(Pila *pila,Subnodo *adyacencias,int vertices_visitados[],int cant_vertices){
+    
+    Subnodo* puntero = adyacencias;
+
+    while (puntero!=NULL)
+    {   
+        int confirmacion=verificarVisitados(puntero->id_conexion,vertices_visitados,cant_vertices);
+
+        if(confirmacion==1){
+            apilar(puntero->id_conexion,pila);
+        }
+
+        puntero = puntero->sigConexion;
+
+    }
+    
+}
+
+
+void tiene_ciclo(Lista* lista){
+
+    Vertice* puntero = lista->cabeza;
+    int inicio;
+    printf("Ingrese el vertice inicial: ");
+    scanf("%d", &inicio);
+    printf("\n OBTENEMOS EL VERTICE INICIAL\n");
+    Vertice* vertice = obtener_vertice(lista, inicio);
+    int cant_vertices=lista->cant_vertices;
+    int visitados[cant_vertices];
+    printf("\n INICIALIZAMOS EL VECTOR\n");
+    inicializar_vector_adyacencias(visitados,cant_vertices,vertice->id_vertice);
+    printf("\n INICIALIZAMOS LA PILA\n");
+    Pila* pila = newPila(); //Inicializo la pila
+    cargarAdyacencias(pila,puntero->subLista,visitados,cant_vertices);
+
+    int nodo_a_visitar = getNextNodo(pila);
+    despilar(pila);
+    dfs(lista, pila, visitados, vertice->id_vertice, nodo_a_visitar);
+
+
+}
+
+
+void dfs(Lista* lista, Pila* pila, int visitados[], int ultimo_visitado, int vertice_a_buscar){
+
+    
+
+}
+*/
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+int cargarVerticesPrincipales(Vertice* vertice,int vectoresPrin[100],int verticeInicial){
+    int i=0;
+
+    while(vertice->id_vertice != verticeInicial){
+        vertice = vertice->sigVertice;
+    }
+
+    Subnodo* ady = vertice->subLista;
+
+    while(ady->sigConexion!=NULL){
+        if(ady->id_conexion==verticeInicial){
+            printf("\n[%d]\n", ady->id_conexion);
+            ady=ady->sigConexion;
+        }
+        else{
+            printf("\n[%d]\n", ady->id_conexion);
+            vectoresPrin[i]=ady->id_conexion;
+            i++;
+            ady=ady->sigConexion;
+        }
+    }
+
+    if(ady->id_conexion != verticeInicial){
+        
+        vectoresPrin[i]=ady->id_conexion;
+        i++;
+        //ady=ady->sigConexion;
+    }
+
+    printf("\n[%d]\n", ady->id_conexion);
+    return i;
+}
+
+
+void limpiarVector (int verticeRecor[100],int i){
+    int j;
+    for (j=0;j<i+1;j++){
+        verticeRecor[j]=-1;
+    }
+}
+
+
+int encontrarCiclosAdy(Subnodo* adyacencia,int verticesPrin[100],int verticesRecor[100],int verticeBuscar,int i,int max){
+    int j;
+    for(j=0;j<i;j++){
+        if(verticesRecor[j]==adyacencia->id_conexion){
+            adyacencia=adyacencia->sigConexion;
+        }
+    }
+    if(adyacencia->sigConexion!=NULL){
+    for(j=0;j<max;j++){
+        if(verticesPrin[j]==adyacencia->id_conexion){
+            return -1;
+        }
+    }
+    return adyacencia->id_conexion;
+    }
+    else{
+        return 0;
+    }
+
+}
+
+
+int encontrarCiclos(Vertice *vertice,int verticesPrin[100],int verticesRecor[100],int verticeBuscar,int i,int max){
+    int encontrado;
+    Subnodo* ady = vertice->subLista;
+    verticesRecor[i]=verticeBuscar;
+    while (vertice->sigVertice!=NULL && vertice->id_vertice!=verticeBuscar){
+        vertice=vertice->sigVertice;
+    }
+    if(vertice->sigVertice!=NULL){
+        encontrado=encontrarCiclosAdy(ady, verticesPrin,verticesRecor,verticeBuscar,i,max);
+        if(encontrado==0){
+            return 0;
+        }
+        if(encontrado==-1){
+            return 1;
+        }
+        else{
+            encontrarCiclos(vertice,verticesPrin,verticesRecor,encontrado,i=i+1,max);
+        }
+    }
+    else{
+        return 0;
+    }
+}
+
+void tiene_ciclos(Lista* lista){
+
+    int vertice_inicial ,vectoresPrin[100],verticeRecor[100],max,encontrado=0,i=1,k=0;
+    printf("\nIngrese el vertice inicial: ");
+    scanf("%d", &vertice_inicial);
+
+    Vertice* puntero = lista->cabeza;
+
+    max=cargarVerticesPrincipales(puntero, vectoresPrin, vertice_inicial);
+    if(max>=2){
+        verticeRecor[0]=vertice_inicial;
+
+
+        while(k<max && encontrado==0){
+            encontrado=encontrarCiclos(puntero,vectoresPrin,verticeRecor,vectoresPrin[k],i,max);
+            k++;
+        }
+
+        if(encontrado==1)
+            printf("Se encontro ciclos");
+        else
+            printf("No hay ciclos");
+        
+    } else{
+        printf("No hay ciclos. No hay mas de dos adyascencias");
+    }
+
+}
+
+/*
+int inicializar_vector(int vec[], int len){
+
+    for(int i = 0; i < len; i++){
+        vec[i] = 0;
+    }
+
+}
+
+void adjuntar_adyacentes(Vertice* vertice, int vec[]){
+
+    Subnodo* puntero = vertice->subLista;
+    int cont = 0;
+
+    while(puntero != NULL){
+        
+        vec[cont] = puntero->id_conexion;
+        cont++;
+        puntero = puntero->sigConexion;
+
+    }
+
+}
+
+
+void tiene_ciclo(Lista* lista){
+
+    Vertice* puntero = lista->cabeza;
+    int inicio;
+    int hay_ciclo = 0;
+
+    printf("Ingrese el vertice inicial: ");
+    scanf("%d", &inicio);
+
+    Vertice* vertice = obtener_vertice(lista, inicio);
+
+    int visitados[lista->cant_vertices];
+    inicializar_vector(visitados, lista->cant_vertices);
+    visitados[inicio-1] = 1;
+    
+    int inicio_adyascentes[vertice->grado_vertice];
+    adjuntar_adyacentes(vertice, inicio_adyascentes);  // Llenamos el array con las adyacencias del inicio
+
+
+    int primer_paso = 1;
+    for(int i = 0; i < vertice->grado_vertice; i++){
+
+        
+        // busqueda_ciclo(inicio_adyascentes[i], visitados, inicio_adyascentes, lista);
+
+    }
+
+    dfs(lista, vertice, visitados);
+
+}
+
+
+void busqueda_ciclo(int v_adyascente, int visitados[], int inicio_adyascentes[], Lista* lista, int primer_paso){
+
+    Vertice* puntero = lista->cabeza;
+    
+
+}
+
+/*
+adyascente_inicio(Vertice vertice, int visitados[]){
+
+    int es_adyascente;
+
+    for(int i = 0, )
+
+}
+
+
+void dfs(Lista* cabeza, Vertice* vertice, int visitados[]){
+
+    int cant_adyacentes = vertice->grado_vertice;
+
+    /* Creamos array con las conexiones adyacentes 
+    int vertices_adyacentes[cant_adyacentes];
+    inicializar_vector(vertices_adyacentes, cant_adyacentes);
+    adjuntar_adyacentes(vertice, vertices_adyacentes);
+
+
+    visitados[vertice->id_vertice-1] = 1;
+     
+}
+*/
