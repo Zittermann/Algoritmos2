@@ -56,12 +56,19 @@ void ejecutar_menu(Lista* lista){
 
             printf("Indique el vertice que quiere ver si hay ciclos: ");
             scanf("%d",&vertice_inicial);
+
+            /* Cargo adyacencias del vertice incial en VecPrin */
+            /* Guardo cantidad de adyacencias en el max */
             max=cargarVerticesPrincipales(lista->cabeza, vectoresPrin ,vertice_inicial);
 
-            if(max>=1){
+            if(max >= 1){
                 verticeRecor[0]=vertice_inicial;
+
+                // Si llego a un vertice sin conexiones mas que el anterior
+                // k es para recorrer el vector VerticePrin
                 while(k<max && encontrado==0){
 
+                    // i = max de elementos del vec recorridos
                     encontrado=encontrarCiclos(lista->cabeza,vectoresPrin,verticeRecor,vectoresPrin[k],i,max);
                     k++;
                 }
@@ -72,7 +79,7 @@ void ejecutar_menu(Lista* lista){
                     printf("No hay ciclos");
                 
             } else 
-                printf("No hay ciclos. Al menos 2 adyacencias");
+                printf("No hay ciclos. Se necesitan al menos 2 adyacencias");
             
 
         }
