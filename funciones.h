@@ -4,17 +4,18 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-typedef struct Conexion{
+typedef struct Subnodo{
     int id_conexion;
-    struct Conexion *sigConexion;
+    struct Subnodo *sigConexion;
     
 }Subnodo;
 
 typedef struct Vertice{
     int id_vertice;
+    int grado_vertice;
     struct Subnodo *subLista;
     struct Vertice  *sigVertice;
-    int grado_vertice;
+
 }Vertice;
 
 typedef struct Lista{
@@ -57,7 +58,7 @@ void dfs(Lista* lista, Pila* pila, int visitados[], int ultimo_visitado, int ver
 
 int cargarVerticesPrincipales(Vertice* vertice,int vectoresPrin[100],int verticeInicial);
 void limpiarVector (int verticeRecor[100],int i);
-int encontrarCiclosAdy(Subnodo* adyacencia,int verticesPrin[100],int verticesRecor[100],int verticeBuscar,int i,int max);
+int encontrarCiclosAdy(Subnodo *adyacencia,int verticesPrin[100],int verticesRecor[100],int verticeBuscar,int i,int max);
 int encontrarCiclos(Vertice *vertice,int verticesPrin[100],int verticesRecor[100],int verticeBuscar,int i,int max);
 void tiene_ciclos(Lista* lista);
 

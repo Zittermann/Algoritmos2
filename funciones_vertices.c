@@ -223,36 +223,27 @@ void dfs(Lista* lista, Pila* pila, int visitados[], int ultimo_visitado, int ver
 */
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-int cargarVerticesPrincipales(Vertice* vertice,int vectoresPrin[100],int verticeInicial){
+int cargarVerticesPrincipales(Vertice *vertice,int vectoresPrin[100],int verticeInicial){
     int i=0;
-
-    while(vertice->id_vertice != verticeInicial){
-        vertice = vertice->sigVertice;
+    while(vertice->id_vertice!=verticeInicial){
+        vertice=vertice->sigVertice;
     }
-
-    Subnodo* ady = vertice->subLista;
-
-    while(ady->sigConexion!=NULL){
-        if(ady->id_conexion==verticeInicial){
-            printf("\n[%d]\n", ady->id_conexion);
-            ady=ady->sigConexion;
+    
+    while(vertice->subLista->sigConexion!=NULL){
+        if(vertice->subLista->id_conexion==verticeInicial){
+            vertice->subLista=vertice->subLista->sigConexion;
         }
         else{
-            printf("\n[%d]\n", ady->id_conexion);
-            vectoresPrin[i]=ady->id_conexion;
-            i++;
-            ady=ady->sigConexion;
+        vectoresPrin[i]=vertice->subLista->id_conexion;
+        i++;
+        vertice->subLista=vertice->subLista->sigConexion;
         }
     }
 
-    if(ady->id_conexion != verticeInicial){
-        
-        vectoresPrin[i]=ady->id_conexion;
-        i++;
-        //ady=ady->sigConexion;
+    if(vertice->subLista->id_conexion!=verticeInicial){
+            vectoresPrin[i]=vertice->subLista->id_conexion;
     }
 
-    printf("\n[%d]\n", ady->id_conexion);
     return i;
 }
 
@@ -265,7 +256,7 @@ void limpiarVector (int verticeRecor[100],int i){
 }
 
 
-int encontrarCiclosAdy(Subnodo* adyacencia,int verticesPrin[100],int verticesRecor[100],int verticeBuscar,int i,int max){
+int encontrarCiclosAdy(Subnodo *adyacencia,int verticesPrin[100],int verticesRecor[100],int verticeBuscar,int i,int max){
     int j;
     for(j=0;j<i;j++){
         if(verticesRecor[j]==adyacencia->id_conexion){
@@ -274,6 +265,7 @@ int encontrarCiclosAdy(Subnodo* adyacencia,int verticesPrin[100],int verticesRec
     }
     if(adyacencia->sigConexion!=NULL){
     for(j=0;j<max;j++){
+
         if(verticesPrin[j]==adyacencia->id_conexion){
             return -1;
         }
@@ -289,13 +281,13 @@ int encontrarCiclosAdy(Subnodo* adyacencia,int verticesPrin[100],int verticesRec
 
 int encontrarCiclos(Vertice *vertice,int verticesPrin[100],int verticesRecor[100],int verticeBuscar,int i,int max){
     int encontrado;
-    Subnodo* ady = vertice->subLista;
     verticesRecor[i]=verticeBuscar;
     while (vertice->sigVertice!=NULL && vertice->id_vertice!=verticeBuscar){
         vertice=vertice->sigVertice;
     }
     if(vertice->sigVertice!=NULL){
-        encontrado=encontrarCiclosAdy(ady, verticesPrin,verticesRecor,verticeBuscar,i,max);
+
+        encontrado=encontrarCiclosAdy(vertice->subLista,verticesPrin,verticesRecor,verticeBuscar,i,max);
         if(encontrado==0){
             return 0;
         }
@@ -309,35 +301,6 @@ int encontrarCiclos(Vertice *vertice,int verticesPrin[100],int verticesRecor[100
     else{
         return 0;
     }
-}
-
-void tiene_ciclos(Lista* lista){
-
-    int vertice_inicial ,vectoresPrin[100],verticeRecor[100],max,encontrado=0,i=1,k=0;
-    printf("\nIngrese el vertice inicial: ");
-    scanf("%d", &vertice_inicial);
-
-    Vertice* puntero = lista->cabeza;
-
-    max=cargarVerticesPrincipales(puntero, vectoresPrin, vertice_inicial);
-    if(max>=2){
-        verticeRecor[0]=vertice_inicial;
-
-
-        while(k<max && encontrado==0){
-            encontrado=encontrarCiclos(puntero,vectoresPrin,verticeRecor,vectoresPrin[k],i,max);
-            k++;
-        }
-
-        if(encontrado==1)
-            printf("Se encontro ciclos");
-        else
-            printf("No hay ciclos");
-        
-    } else{
-        printf("No hay ciclos. No hay mas de dos adyascencias");
-    }
-
 }
 
 /*

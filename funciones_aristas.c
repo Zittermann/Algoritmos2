@@ -125,7 +125,7 @@ void desconectar_vertices(Vertice* vertice, int id_nodo){
                     anterior->sigConexion = puntero->sigConexion;
 
                 }
-
+                //vertice->grado_vertice -= 1;
                 free(puntero);
 
             }

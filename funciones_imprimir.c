@@ -51,7 +51,29 @@ void ejecutar_menu(Lista* lista){
             es_eureliano(lista);
 
         } else if(opcion == 7){
-            tiene_ciclos(lista);
+
+            int vertice_inicial ,vectoresPrin[100],verticeRecor[100],max,encontrado=0,i=1,k=0;
+
+            printf("Indique el vertice que quiere ver si hay ciclos: ");
+            scanf("%d",&vertice_inicial);
+            max=cargarVerticesPrincipales(lista->cabeza, vectoresPrin ,vertice_inicial);
+
+            if(max>=1){
+                verticeRecor[0]=vertice_inicial;
+                while(k<max && encontrado==0){
+
+                    encontrado=encontrarCiclos(lista->cabeza,vectoresPrin,verticeRecor,vectoresPrin[k],i,max);
+                    k++;
+                }
+
+                if(encontrado==1)
+                    printf("Se encontro ciclos");
+                else
+                    printf("No hay ciclos");
+                
+            } else 
+                printf("No hay ciclos. Al menos 2 adyacencias");
+            
 
         }
 
